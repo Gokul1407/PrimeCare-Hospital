@@ -26,9 +26,16 @@ class Doctors(models.Model):
 
     def reset_tokens(self):
         now = timezone.now()
-        yesterday = now - timedelta(days=1)
-        tokens_to_reset = Token.objects.filter(doctor=self, appointment_time__lt=yesterday)
+        today = now.date()
+
+        # Find all tokens for this doctor that have appointment times in the past
+        tokens_to_reset = Token.objects.filter(doctor=self, appointment_time__lt=now)
+
         for token in tokens_to_reset:
+            # Update the token number to reset to 1
+            token.number = 1
+            # Calculate the new appointment time based on the current date and reset the is_booked flag
+            token.appointment_time = now
             token.is_booked = False
             token.save()
 
