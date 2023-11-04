@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Failed</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 mt-5">
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">Appointment Failed</h4>
+                    <p>Sorry, we couldn't book your appointment. Appointments are only available from 6 am to 4 pm. Please choose a valid appointment time.</p>
+                </div>
+                <a href="{% url 'book_appointment' %}" class="btn btn-primary">Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

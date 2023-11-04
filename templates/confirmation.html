@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Appointment Confirmation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+    <!-- Confirmation Start -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="text-center">
+                    <h1 class="mb-4" style="color: blue;">Prime Care Hospital </h1> <!-- Replace 'Hospital Name' with your hospital's name -->
+                    <h2 class="mb-4">Appointment Confirmed</h2>
+                    <p>Your appointment has been successfully booked.</p>
+                    <p>Patient Name: {{ appointment.name }}</p>
+                    <p>Appointment Date: {{ appointment.date }}</p>
+                    <p>Time: {{ appointment.appointment_time }}</p>
+                    <p>Token Number: {{ appointment.token.number }}</p>
+                    <button onclick="window.print()" class="btn btn-primary">Print Confirmation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation End -->
+
+</body>
+</html>

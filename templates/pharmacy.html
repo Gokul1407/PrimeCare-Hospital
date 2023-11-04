@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Online Pharmacy Products Page Start -->
+<div class="container mt-5">
+    <div class="row justify-content-between align-items-center">
+        <div class="col-md-4">
+            <h3 class="text-start" style="color: rgb(13, 58, 207);">Our Pharmacy</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            <!-- Cart Icon Button -->
+            <a href="{% url 'view_cart' %}" class="btn btn-primary">
+                <i class="bi bi-cart4 cart-icon" style="color: rgb(13, 58, 207);"></i> Cart
+            </a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <!-- Category Selection Dropdown -->
+            <div class="mb-3">
+                <div class="card-body">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: blue;">
+                            Categories
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'category_sort' category.category_slug %}">{{ category.category_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div> <!-- card-body.// -->
+            </div>
+        </div>
+    </div>
+    <div class="row" id="product-list">
+        <!-- Product Listing -->
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <img src="{{ product.product_img.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <a href="{% url 'product_details' product_slug=product.product_slug %}"><h5 class="card-title">{{ product.product_name }}</h5></a>
+                    <p class="card-text">Price: ${{ product.product_price }}</p>
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Online Pharmacy Products Page End -->
+{% endblock %}

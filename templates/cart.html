@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+CART PAGE
+{% endblock %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+    <div class="container">
+        {% if cart_items %}
+        <div class="row">
+            <aside class="col-lg-9">
+                <div class="card">
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Product</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                                <th scope="col" class="text-right" width="200">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart_items %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside">
+                                            <img src="{{ MEDIA_URL }}{{ item.product.product_img.url }}" class="img-sm" alt="{{ item.product.product_name }}">
+                                        </div>
+                                        <figcaption class="info">
+                                            <a href="{% url 'product_details' item.product.id %}" class="title text-dark">{{ item.product.product_name }}</a>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td>
+                                    <div class="col">
+                                        <div class="input-group input-spinner">
+                                            <div class="input-group-prepend">
+                                                <form action="{% url 'decrease_quantity' item.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-light btn-minus"> <i class="fa fa-minus"></i> </button>
+                                                </form>
+                                            </div>
+                                            <input type="text" class="form-control quantity-input" value="{{ item.quantity }}">
+                                            <div class="input-group-append">
+                                                <form action="{% url 'add_to_cart' item.product.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-light btn-plus"> <i class="fa fa-plus"></i> </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-wrap">
+                                        <var class="price"> {{ item.sub_total }} INR</var>
+                                        <small class="text-muted">Price per item: {{ item.product.product_price }} INR</small>
+                                    </div>
+                                </td>
+                                <td class="text-right">
+                                    <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger" onclick='return confirm("Are you sure to remove this product?")'>Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+            <aside class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="dlist-align">
+                            <dt>Total price:</dt>
+                            <dd class="text-right">{{ total_price }} INR</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Tax:</dt>
+                            <dd class="text-right">{{ tax }} INR</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Grand Total:</dt>
+                            <dd class="text-right text-dark b"><strong>{{ overall_total }} INR</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <img src="{% static 'images/misc/payments.png' %}" height="26" alt="Payments">
+                        </p>
+                        <a href="" class="btn btn-primary btn-block">Checkout</a>
+                        <a href="{% url 'pharmacy' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <h3>Your cart is empty</h3>
+            <a href="{% url 'pharmacy' %}" class="btn btn-primary">Go to Store</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

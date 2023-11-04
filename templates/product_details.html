@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Product Details Page Start -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Product Image -->
+            <img src="{{ products.product_img.url }}" class="img-fluid" alt="{{ product.product_name }}">
+        </div>
+        <div class="col-md-6">
+            <!-- Product Details -->
+            <h1>{{ products.product_name }}</h1>
+            <p>{{ products.product_description }}</p>
+            <p>Price: ${{ products.product_price }}</p>
+            <button class="btn btn-primary">Add to Cart</button>
+            <a href="{% url 'pharmacy' %}" class="btn btn-secondary">Back to store</a>
+        </div>
+    </div>
+</div>
+<!-- Product Details Page End -->
+{% endblock %}
