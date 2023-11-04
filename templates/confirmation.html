@@ -16,9 +16,10 @@
                     <p>Your appointment has been successfully booked.</p>
                     <p>Patient Name: {{ appointment.name }}</p>
                     <p>Appointment Date: {{ appointment.date }}</p>
-                    <p>Time: {{ appointment.appointment_time }}</p>
+                    <p>Time: {{ appointment.token.appointment_time }}</p>
                     <p>Token Number: {{ appointment.token.number }}</p>
                     <button onclick="window.print()" class="btn btn-primary">Print Confirmation</button>
+                    <a href="/"><button class="btn btn-primary">Back to home</button></a>
                 </div>
             </div>
         </div>

@@ -1,6 +1,8 @@
+from datetime import timedelta
 from django.db import models
 from django.utils.text import slugify
-# Create your models here.
+from django.utils import timezone
+
 class Departments(models.Model):
     dep_name = models.CharField(max_length=50)
     dep_description = models.TextField()
@@ -9,12 +11,26 @@ class Departments(models.Model):
 
     def __str__(self):
         return self.dep_name
+
+class Token(models.Model):
+    number = models.PositiveIntegerField()
+    appointment_time = models.TimeField(null=True)
+    is_booked = models.BooleanField(default=False)
+    doctor = models.ForeignKey('Doctors', on_delete=models.CASCADE, default=1)
     
 
 class Doctors(models.Model):
-    department = models.ForeignKey(Departments, on_delete=models.CASCADE,null=True,blank=True)
+    department = models.ForeignKey(Departments, on_delete=models.CASCADE, default=1)
     doctor_name = models.CharField(max_length=50)
     doctor_slug = models.SlugField(unique=True)
+
+    def reset_tokens(self):
+        now = timezone.now()
+        yesterday = now - timedelta(days=1)
+        tokens_to_reset = Token.objects.filter(doctor=self, appointment_time__lt=yesterday)
+        for token in tokens_to_reset:
+            token.is_booked = False
+            token.save()
 
     def save(self, *args, **kwargs):
         self.doctor_slug = slugify(self.doctor_name)
@@ -23,18 +39,12 @@ class Doctors(models.Model):
     def __str__(self):
         return self.doctor_name
 
-class Token(models.Model):
-    number = models.PositiveIntegerField(unique=True)
-    appointment_time = models.TimeField(null=True)  # Add an appointment_time field
-    is_booked = models.BooleanField(default=False)
-
 class Appointment(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    department = models.ForeignKey(Departments, on_delete=models.CASCADE,null=True,blank=True)  # Change this line
-    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE,blank=True,null=True)  # Change this line
+    department = models.ForeignKey(Departments, on_delete=models.CASCADE, default=1)
+    doctor = models.ForeignKey(Doctors, on_delete=models.CASCADE, default=1)
     date = models.DateField()
     problem = models.TextField()
-    token = models.ForeignKey(Token, on_delete=models.SET_NULL, null=True,blank=True)
-    
+    token = models.ForeignKey(Token, on_delete=models.SET_NULL, null=True)
