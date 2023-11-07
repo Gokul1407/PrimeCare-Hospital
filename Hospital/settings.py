@@ -144,3 +144,11 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # or your email service provider's SMTP server
+EMAIL_PORT = 587  # Gmail's SMTP port
+EMAIL_USE_TLS = True  # Use TLS for secure communication
+EMAIL_HOST_USER = 'gokul140797@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'hlak fqlk gguo hugf'  # Your email password
+DEFAULT_FROM_EMAIL = 'gokul140797@gmail.com'  # Sender's email address

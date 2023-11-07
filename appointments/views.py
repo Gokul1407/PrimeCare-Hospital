@@ -2,6 +2,9 @@ from .models import Appointment, Departments, Doctors
 from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 
 def appointment_form(request):
     departments = Departments.objects.all()
@@ -20,13 +23,10 @@ def appointment_form(request):
         department = Departments.objects.get(dep_slug=department_slug)
         doctor = Doctors.objects.get(doctor_slug=doctor_slug)
 
-        # Validate the date for tomorrow or later
         tomorrow = timezone.now() + timedelta(days=1)
         if appointment_date < tomorrow.date():
-            # Return an error message if the selected date is not tomorrow or later
             return redirect('failed_page')
 
-        # Generate token number for the doctor
         latest_token = Appointment.objects.filter(
             doctor=doctor,
             appointment_date=appointment_date
@@ -37,7 +37,6 @@ def appointment_form(request):
         else:
             token_number = 1
 
-        # Calculate the appointment time slot
         start_time = datetime.strptime('08:00:00', '%H:%M:%S')
         time_interval = timedelta(minutes=15)
         appointment_time = (start_time + (time_interval * (token_number - 1))).time()
@@ -55,13 +54,27 @@ def appointment_form(request):
         )
         appointment.save()
 
+        # Send confirmation email
+        subject = 'Appointment Confirmation'
+        message = 'Your appointment has been successfully booked. Please find the details below:'
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [email]  # User's email address
+
+        context = {
+            'appointment': appointment,
+        }
+
+        email_content = render_to_string('confirmation_email.html', context)
+
+        send_mail(subject, message, from_email, recipient_list, html_message=email_content)
+
         return redirect('success_page', appointment_id=appointment.id)
 
     return render(request, 'appointment.html', {'departments': departments, 'doctors': doctors})
 
-def success_page(request,appointment_id):
+def success_page(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
-    return render(request,'confirmation.html',{'appointment':appointment})
+    return render(request, 'confirmation.html', {'appointment': appointment})
 
 def failed_page(request):
-    return render(request,'appointment_failed.html')
+    return render(request, 'appointment_failed.html')
