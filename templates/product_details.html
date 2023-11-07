@@ -6,15 +6,22 @@
     <div class="row">
         <div class="col-md-6">
             <!-- Product Image -->
-            <img src="{{ products.product_img.url }}" class="img-fluid" alt="{{ product.product_name }}">
+            <img src="{{ products.product_img.url }}" class="img-fluid" alt="{{ products.product_name }}">
         </div>
         <div class="col-md-6">
             <!-- Product Details -->
             <h1>{{ products.product_name }}</h1>
             <p>{{ products.product_description }}</p>
             <p>Price: ${{ products.product_price }}</p>
-            <button class="btn btn-primary">Add to Cart</button>
-            <a href="{% url 'pharmacy' %}" class="btn btn-secondary">Back to store</a>
+            <form method="POST" action="{% url 'add_to_cart' products.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-6">
+            <a href="{% url 'pharmacy' %}" class="btn btn-secondary btn-block">Back to store</a>
         </div>
     </div>
 </div>

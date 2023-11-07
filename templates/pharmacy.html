@@ -8,15 +8,21 @@
             <h3 class="text-start" style="color: rgb(13, 58, 207);">Our Pharmacy</h3>
         </div>
         <div class="col-md-4 text-end">
-            <!-- Cart Icon Button -->
             <a href="{% url 'view_cart' %}" class="btn btn-primary">
                 <i class="bi bi-cart4 cart-icon" style="color: rgb(13, 58, 207);"></i> Cart
             </a>
         </div>
-    </div>
-    <div class="row mt-4">
         <div class="col-md-4">
-            <!-- Category Selection Dropdown -->
+            <form method="get" action="{% url 'pharmacy' %}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="Search for products" value="{{ request.GET.q }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
             <div class="mb-3">
                 <div class="card-body">
                     <div class="dropdown">
@@ -24,6 +30,7 @@
                             Categories
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                            <li><a class="dropdown-item" href="{% url 'pharmacy' %}">All</a></li>
                             {% for category in categories %}
                                 <li><a class="dropdown-item" href="{% url 'category_sort' category.category_slug %}">{{ category.category_name }}</a></li>
                             {% endfor %}
@@ -35,19 +42,34 @@
     </div>
     <div class="row" id="product-list">
         <!-- Product Listing -->
-        {% for product in products %}
-        <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <img src="{{ product.product_img.url }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
-                    <a href="{% url 'product_details' product_slug=product.product_slug %}"><h5 class="card-title">{{ product.product_name }}</h5></a>
-                    <p class="card-text">Price: ${{ product.product_price }}</p>
-                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+        {% if products %}
+            {% for product in products %}
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow">
+                        <div class="image-container" style="height: 200px; overflow: hidden;">
+                            <img src="{{ product.product_img.url }}" class="card-img-top img-thumbnail" alt="{{ product.name }}">
+                        </div>
+                        <div class="card-body">
+                            <a href="{% url 'product_details' product_slug=product.product_slug %}"><h5 class="card-title">{{ product.product_name }}</h5></a>
+                            <p class="card-text">Price: {{ product.product_price }} INR</p>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to Cart</a>
+                        </div>
+                    </div>
                 </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-md-12 text-center">
+                <h3>No search results found</h3>
             </div>
-        </div>
-        {% endfor %}
+        {% endif %}
     </div>
 </div>
 <!-- Online Pharmacy Products Page End -->
+<style>
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
 {% endblock %}

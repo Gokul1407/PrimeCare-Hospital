@@ -4,6 +4,12 @@ from my_pharmacy.models import Category, Products
 def pharmacy(request):
     products = Products.objects.all()
     categories = Category.objects.all()
+
+    # Search functionality
+    search_query = request.GET.get('q', '')
+    if search_query:
+        products = products.filter(product_name__icontains=search_query)
+
     return render(request, 'pharmacy.html', {'products': products, 'categories': categories})
 
 def category_sort(request,category_slug):
