@@ -150,5 +150,5 @@ EMAIL_HOST = 'smtp.gmail.com'  # or your email service provider's SMTP server
 EMAIL_PORT = 587  # Gmail's SMTP port
 EMAIL_USE_TLS = True  # Use TLS for secure communication
 EMAIL_HOST_USER = 'gokul140797@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'hlak fqlk gguo hugf'  # Your email password
+EMAIL_HOST_PASSWORD = 'dryj cbup eqlr spof'  # Your email password
 DEFAULT_FROM_EMAIL = 'gokul140797@gmail.com'  # Sender's email address
